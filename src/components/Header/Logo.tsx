@@ -1,0 +1,15 @@
+import { Text } from '@chakra-ui/react'
+
+export function Logo() {
+  return (
+    <Text
+      fontSize='3xl'
+      fontWeight='bold'
+      w='64'
+    >
+      DashGo
+      <Text as='span' ml='1' color='pink.500' fontWeight='bold'>.</Text>
+
+    </Text>
+  )
+}
