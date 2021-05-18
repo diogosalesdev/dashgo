@@ -1,10 +1,9 @@
-import NextLink from 'next/link';
+import Link from 'next/link';
 import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Pagination } from '../../components/Pagination';
-import { FlatTree } from 'framer-motion';
 
 export default function UserList() {
   const isWideVersion = useBreakpointValue({
@@ -25,7 +24,7 @@ export default function UserList() {
               Usuários
             </Heading>
 
-            <NextLink href='#' passHref>
+            <Link href='/users/create' passHref>
               <Button
                 as='a'
                 size='sm'
@@ -35,7 +34,7 @@ export default function UserList() {
               >
                 Criar novo
               </Button>
-            </NextLink>
+            </Link>
           </Flex>
 
           <Table colorScheme='whiteAlpha'>
@@ -63,7 +62,7 @@ export default function UserList() {
                 </Td>
                 {  isWideVersion && <Td>17 de Maio de 2021</Td> }
                 <Td>
-                  <NextLink href='#' passHref>
+                  <Link href='#' passHref>
                     <Button
                       as='a'
                       size='sm'
@@ -73,7 +72,7 @@ export default function UserList() {
                     >
                       Editar
                     </Button>
-                  </NextLink>
+                  </Link>
                 </Td>
               </Tr>
               <Tr>
@@ -88,7 +87,7 @@ export default function UserList() {
                 </Td>
                 {  isWideVersion && <Td>17 de Maio de 2021</Td> }
                 <Td>
-                  <NextLink href='#' passHref>
+                  <Link href='#' passHref>
                     <Button
                       as='a'
                       size='sm'
@@ -98,7 +97,7 @@ export default function UserList() {
                     >
                       Editar
                     </Button>
-                  </NextLink>
+                  </Link>
                 </Td>
               </Tr>
               <Tr>
@@ -113,7 +112,7 @@ export default function UserList() {
                 </Td>
                 {  isWideVersion && <Td>17 de Maio de 2021</Td> }
                 <Td>
-                  <NextLink href='#' passHref>
+                  <Link href='#' passHref>
                     <Button
                       as='a'
                       size='sm'
@@ -123,7 +122,7 @@ export default function UserList() {
                     >
                       Editar
                     </Button>
-                  </NextLink>
+                  </Link>
                 </Td>
               </Tr>
             </Tbody>
