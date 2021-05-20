@@ -1,19 +1,33 @@
-import Link from 'next/link';
-import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
+import NextLink from 'next/link';
+import { Box, Button, Checkbox, Flex, Heading, Icon, Link, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Pagination } from '../../components/Pagination';
 import { useUsers } from '../../services/hooks/UseUsers';
+import { useState } from 'react';
+import { queryClient } from '../../services/queryClient';
+import { api } from '../../services/api';
 
 export default function UserList() {
-  const {data, isLoading, isFetching, error} = useUsers()
+  const [page, setPage] = useState(1)
+  const {data, isLoading, isFetching, error} = useUsers(page)
 
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true
   })
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const response = await api.get(`users/${userId}`)
+
+      return response.data
+    }, {
+      staleTime: 1000 * 60 * 10 // 10 minutos
+    })
+  }
 
   return (
     <Box>
@@ -29,7 +43,7 @@ export default function UserList() {
               { !isLoading && isFetching && <Spinner size='sm' color='gray.500' ml='4' /> }
             </Heading>
 
-            <Link href='/users/create' passHref>
+            <NextLink href='/users/create' passHref>
               <Button
                 as='a'
                 size='sm'
@@ -39,7 +53,7 @@ export default function UserList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </NextLink>
           </Flex>
 
           { isLoading ? (
@@ -65,7 +79,7 @@ export default function UserList() {
                 </Thead>
 
                 <Tbody>
-                  {data.map(user => {
+                  {data.users.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px={['4', '4', '6']}>
@@ -73,7 +87,9 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Text fontWeight='bold'>{user.name}</Text>
+                            <Link color='purple.400' onMouseEnter={() => handlePrefetchUser(user.id)}>
+                              <Text fontWeight='bold'>{user.name}</Text>
+                            </Link>
                             <Text
                               fontSize='sm'
                               fontWeight='normal'
@@ -85,7 +101,7 @@ export default function UserList() {
                         </Td>
                         {  isWideVersion && <Td>{user.createdAt}</Td> }
                         <Td>
-                          <Link href='#' passHref>
+                          <NextLink href='#' passHref>
                             <Button
                               as='a'
                               size='sm'
@@ -95,7 +111,7 @@ export default function UserList() {
                             >
                               Editar
                             </Button>
-                          </Link>
+                          </NextLink>
                         </Td>
                       </Tr>
                     )
@@ -104,7 +120,11 @@ export default function UserList() {
                 </Tbody>
               </Table>
 
-              <Pagination />
+              <Pagination 
+                totalCountOfRegisters={data.totalCount}
+                currentPage={page}
+                onPageChange={setPage}
+              />
             </>
           )}
 
